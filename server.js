@@ -23,6 +23,10 @@ io.on('connection', (client) => {
     client.on('disconnet', () => {
         io.emit('message', 'User Left the Chat')    
     });
+
+    client.on('chatMessage', (msg) => {
+        io.emit('message', msg);
+    });
 }); 
 
 
