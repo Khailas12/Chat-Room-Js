@@ -7,14 +7,23 @@ const socketio = require('socket.io');
 const expressApp = express();
 const port = 3000 || process.env.PORT;
 const server = http.createServer(expressApp);
-const socketIo = socketio(server);
+const io = socketio(server)
 
-expressApp.use(express.static(path.join(__dirname, 'public')));     // static folder
+// static folder access
+const publicDirectoryPath = path.join(__dirname, '/public');
+expressApp.use(express.static(publicDirectoryPath));
 
 
-socketIo.on('connection', socket => {
-    console.log('Client connected')
-});    // runs when client connects
+ // runs when client connects
+io.on('connection', (client) => {
+    client.emit('messageFromServer', 'Welcome to WayCord');
+
+    client.broadcast.emit('messageForSingleClient', 'User joined the Chat');    // Broadcast when a single user connects
+
+    client.on('disconnet', () => {
+        io.emit('message', 'User Left the Chat')    
+    });
+}); 
 
 
 server.listen(port, () => {
