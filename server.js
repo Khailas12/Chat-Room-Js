@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const socketio = require('socket.io');
+const formatMessage = require('./utils/messages');
 
 
 const expressApp = express();
@@ -13,21 +14,22 @@ const io = socketio(server)
 const publicDirectoryPath = path.join(__dirname, '/public');
 expressApp.use(express.static(publicDirectoryPath));
 
+const botName = 'WayCord Bot';
 
- // runs when client connects
+// runs when client connects
 io.on('connection', (client) => {
-    io.emit('message', 'Welcome to WayCord');
+    io.emit('message', formatMessage(botName, 'Welcome to WayCord'));
 
-    client.broadcast.emit('message', 'User joined the Chat');    // Broadcast when a single user connects
+    client.broadcast.emit('message', formatMessage(botName, 'User joined the Chat'));    // Broadcast when a single user connects
 
     client.on('disconnet', () => {
-        io.emit('message', 'User Left the Chat')    
+        io.emit('message', formatMessage(botName, 'User Left the Chat'));
     });
 
     client.on('chatMessage', (msg) => {
-        io.emit('message', msg);
+        io.emit('message', formatMessage('user', msg));
     });
-}); 
+});
 
 
 server.listen(port, () => {
