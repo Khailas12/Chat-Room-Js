@@ -1,6 +1,6 @@
 const client = io();
 
 
-client.on('messageFromServer', message => {
+client.on('message', message => {
     console.log(message);
 });

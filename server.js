@@ -16,9 +16,9 @@ expressApp.use(express.static(publicDirectoryPath));
 
  // runs when client connects
 io.on('connection', (client) => {
-    client.emit('messageFromServer', 'Welcome to WayCord');
+    io.emit('message', 'Welcome to WayCord');
 
-    client.broadcast.emit('messageForSingleClient', 'User joined the Chat');    // Broadcast when a single user connects
+    client.broadcast.emit('message', 'User joined the Chat');    // Broadcast when a single user connects
 
     client.on('disconnet', () => {
         io.emit('message', 'User Left the Chat')    
