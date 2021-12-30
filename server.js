@@ -3,6 +3,7 @@ const path = require('path');
 const http = require('http');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages');
+const { userJoin, getCurrentUser } = require('./utils/users');
 
 
 const expressApp = express();
@@ -20,15 +21,21 @@ const botName = 'WayCord Bot';
 io.on('connection', (client) => {
     client.on('joinRoom', ({ username, room }) => {
 
+        const user = userJoin(client.id, username, room);
+        client.join(user.room);
+
         io.emit('message', formatMessage(botName, 'Welcome to WayCord'));   // welcome msg
 
-        client.broadcast.emit('message', formatMessage(botName, 'User joined the Chat'));    // Broadcast when a single user connects
+        client.broadcast
+            .to(user.room)
+            .emit('message', 
+            formatMessage(botName, `${user.username} joined the Chat`));    // Broadcast when a single user connects
     });
-
+    
     client.on('chatMessage', (msg) => {
         io.emit('message', formatMessage('user', msg));
     });
-
+    
     client.on('disconnet', () => {
         io.emit('message', formatMessage(botName, 'User Left the Chat'));
     });

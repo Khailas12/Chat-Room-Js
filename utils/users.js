@@ -14,4 +14,4 @@ const getCurrentUser = ((id) => {
     });
 });
 
-modules.exports = { userJoin, getCurrentUser };
+module.exports = { userJoin, getCurrentUser };
