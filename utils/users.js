@@ -7,11 +7,6 @@ const userJoin = ((id, username, room) => {
     return user;
 });
 
-
-const getCurrentUser = ((id) => {
-    return users.find(user => {
-        user.id === id
-    });
-});
+const getCurrentUser = (id) => users.find((user)=> user.id === id)
 
 module.exports = { userJoin, getCurrentUser };

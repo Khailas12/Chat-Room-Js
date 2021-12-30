@@ -33,9 +33,11 @@ io.on('connection', (client) => {
     });
     
     client.on('chatMessage', (msg) => {
-        io.emit('message', formatMessage('user', msg));
+        const user = getCurrentUser(client.id);
+
+        io.to(user.room).emit('message', formatMessage(user.username, msg));
     });
-    
+
     client.on('disconnet', () => {
         io.emit('message', formatMessage(botName, 'User Left the Chat'));
     });
