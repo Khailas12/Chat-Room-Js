@@ -30,23 +30,38 @@ io.on('connection', (client) => {
             .to(user.room)
             .emit('message', 
             formatMessage(botName, `${user.username} joined the Chat`));    // Broadcast when a single user connects
+
+        // users and room info
+        io.to(user.room).emit('roomUsers', {
+            room: user.room,
+            users: getRoomUsers(user.room)
+        });
+
     });
     
+
     client.on('chatMessage', (msg) => {
         const user = getCurrentUser(client.id);
 
         io.to(user.room).emit('message', formatMessage(user.username, msg));
     });
 
+
     client.on('disconnet', () => {
         const user = userLeave(client.id);
         
         if (user) {
-            io.to(user.room).
-            emit(
+            io.to(user.room)
+            .emit(
                 'message', 
                 formatMessage(botName, `${user.username} Left the Chat`)
             );
+
+            io.to(user.room).emit('roomUsers', {
+                room: user.room, 
+                users: getRoomUsers(user.room)
+            });
+            
         }
     });
 });
