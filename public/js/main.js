@@ -1,7 +1,14 @@
 const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat-messages');
+
+// fetching username and room from cdnqs in chat.html
+const { username, room } = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+});
 const client = io();
 
+
+client.emit('joinRoom', { username, room });
 
 client.on('message', message => {   // msg frm server
     console.log(message);

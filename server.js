@@ -18,16 +18,19 @@ const botName = 'WayCord Bot';
 
 // runs when client connects
 io.on('connection', (client) => {
-    io.emit('message', formatMessage(botName, 'Welcome to WayCord'));
+    client.on('joinRoom', ({ username, room }) => {
 
-    client.broadcast.emit('message', formatMessage(botName, 'User joined the Chat'));    // Broadcast when a single user connects
+        io.emit('message', formatMessage(botName, 'Welcome to WayCord'));   // welcome msg
 
-    client.on('disconnet', () => {
-        io.emit('message', formatMessage(botName, 'User Left the Chat'));
+        client.broadcast.emit('message', formatMessage(botName, 'User joined the Chat'));    // Broadcast when a single user connects
     });
 
     client.on('chatMessage', (msg) => {
         io.emit('message', formatMessage('user', msg));
+    });
+
+    client.on('disconnet', () => {
+        io.emit('message', formatMessage(botName, 'User Left the Chat'));
     });
 });
 
