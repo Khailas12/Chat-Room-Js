@@ -15,6 +15,10 @@ const io = socketio(server)
 const publicDirectoryPath = path.join(__dirname, '/public');
 expressApp.use(express.static(publicDirectoryPath));
 
+server.listen(port, () => {
+    console.log(`Server running on port: ${port}`);
+});
+
 const botName = 'WayCord Bot';
 
 // runs when client connects
@@ -64,9 +68,4 @@ io.on('connection', (client) => {
             
         }
     });
-});
-
-
-server.listen(port, () => {
-    console.log(`Server running on port: ${port}`);
 });

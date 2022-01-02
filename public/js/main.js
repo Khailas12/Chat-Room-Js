@@ -14,8 +14,7 @@ const client = io();
 
 client.emit('joinRoom', { username, room });
 
-client.on('roomUsers', (
-    { room, users }) => {
+client.on('roomUsers', ({ room, users }) => {
     outputRoomName(room);
     outputRoomName(users);
 }
@@ -29,7 +28,7 @@ client.on('message', message => {   // msg frm server
     chatMessages.scrollTop = chatMessages.scrollHeight;    // auto scroll
 });
 
-chatForm.addEventListener('submit', e => {   // e - event
+chatForm.addEventListener('submit', (e) => {   // e - event
     e.preventDefault();
 
     const msg = e.target.elements.msg.value;    // text msg
